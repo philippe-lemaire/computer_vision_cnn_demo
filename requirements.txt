@@ -1,8 +1,12 @@
 pandas
 numpy
-streamlit
 matplotlib
 jupyterlab
 tensorflow
 scikit-learn
 black
+streamlit>=0.88
+streamlit-drawable-canvas>=0.8
+svgpathtools
+svgwrite
+opencv-python
