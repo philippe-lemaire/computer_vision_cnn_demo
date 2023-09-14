@@ -55,57 +55,54 @@ def full_app():
     """
     )
 
-    with st.echo("below"):
-        zoomfactor = 5
-        # Specify canvas parameters in application
-        drawing_mode = st.sidebar.selectbox(
-            "Drawing tool:",
-            ("freedraw",),
+    zoomfactor = 5
+    # Specify canvas parameters in application
+    drawing_mode = st.sidebar.selectbox(
+        "Drawing tool:",
+        ("freedraw",),
+    )
+    stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, zoomfactor)
+    if drawing_mode == "point":
+        point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
+    stroke_color = st.sidebar.color_picker("Stroke color hex: ", "#FFF")
+    bg_color = st.sidebar.color_picker("Background color hex: ", "#000")
+    bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
+    realtime_update = st.sidebar.checkbox("Update in realtime", True)
+
+    # Create a canvas component
+    canvas_result = st_canvas(
+        fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
+        stroke_width=stroke_width,
+        stroke_color=stroke_color,
+        background_color=bg_color,
+        background_image=Image.open(bg_image) if bg_image else None,
+        update_streamlit=realtime_update,
+        height=28 * zoomfactor,
+        width=28 * zoomfactor,
+        drawing_mode=drawing_mode,
+        point_display_radius=point_display_radius if drawing_mode == "point" else 0,
+        display_toolbar=st.sidebar.checkbox("Display toolbar", True),
+        key="full_app",
+    )
+
+    # Do something interesting with the image
+
+    def make_prediction():
+        st.image(canvas_result.image_data)
+        img_data = canvas_result.image_data[:, :, 0].reshape(
+            28 * zoomfactor, 28 * zoomfactor, 1
         )
-        stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, zoomfactor)
-        if drawing_mode == "point":
-            point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
-        stroke_color = st.sidebar.color_picker("Stroke color hex: ", "#FFF")
-        bg_color = st.sidebar.color_picker("Background color hex: ", "#000")
-        bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
-        realtime_update = st.sidebar.checkbox("Update in realtime", True)
+        zoomed_img = cv2.resize(img_data, None, fx=1 / zoomfactor, fy=1 / zoomfactor)
 
-        # Create a canvas component
-        canvas_result = st_canvas(
-            fill_color="rgba(255, 165, 0, 0.3)",  # Fixed fill color with some opacity
-            stroke_width=stroke_width,
-            stroke_color=stroke_color,
-            background_color=bg_color,
-            background_image=Image.open(bg_image) if bg_image else None,
-            update_streamlit=realtime_update,
-            height=28 * zoomfactor,
-            width=28 * zoomfactor,
-            drawing_mode=drawing_mode,
-            point_display_radius=point_display_radius if drawing_mode == "point" else 0,
-            display_toolbar=st.sidebar.checkbox("Display toolbar", True),
-            key="full_app",
-        )
+        to_predict = np.array([zoomed_img])
+        prediction = model.predict(to_predict)
+        st.write("### La prédiction :")
+        st.write(np.argmax(prediction, axis=1))
+        st.write("### Les probabilités estimées pour chaque chiffre")
+        st.write(prediction)
 
-        # Do something interesting with the image
-
-        def make_prediction():
-            st.image(canvas_result.image_data)
-            img_data = canvas_result.image_data[:, :, 0].reshape(
-                28 * zoomfactor, 28 * zoomfactor, 1
-            )
-            zoomed_img = cv2.resize(
-                img_data, None, fx=1 / zoomfactor, fy=1 / zoomfactor
-            )
-
-            to_predict = np.array([zoomed_img])
-            prediction = model.predict(to_predict)
-            st.write("### La prédiction :")
-            st.write(np.argmax(prediction, axis=1))
-            st.write("### Les probabilités estimées pour chaque chiffre")
-            st.write(prediction)
-
-        if st.button("Obtenir la prédiction"):
-            make_prediction()
+    if st.button("Obtenir la prédiction"):
+        make_prediction()
 
 
 if __name__ == "__main__":
