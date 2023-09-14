@@ -5,6 +5,7 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
+from get_data import get_training_data
 
 
 def create_model():
@@ -42,7 +43,7 @@ def create_model():
 
 def main():
     ## Data loading
-    X = pd.read_csv("train.csv")
+    X = get_training_data()
     y = X.label
     X = X.drop(columns="label")
 
