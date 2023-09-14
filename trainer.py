@@ -16,10 +16,10 @@ def create_model():
                 64, (3, 3), input_shape=(28, 28, 1), activation="relu", padding="same"
             ),
             # une couche de MaxPool2D
-            MaxPool2D(2, 2),
+            MaxPool2D(3, 3),
             # une autre couche de neurones convolutifs et son MaxPool
             Conv2D(64, 3, activation="relu", padding="same"),
-            MaxPool2D(2, 2),
+            MaxPool2D(3, 3),
             # Couche Flatten
             # on met tout à plat à la fin
             Flatten(),
@@ -56,7 +56,7 @@ def main():
 
     ## training parameters
     epochs = 20
-    patience = 3
+    patience = 5
     earlystop = EarlyStopping(
         monitor="val_loss", patience=patience, restore_best_weights=True
     )
