@@ -51,7 +51,9 @@ def main():
 
     ## data val split
     X_train, X_val, y_train, y_val = train_test_split(
-        X, y, train_size=0.7, random_state=1
+        X,
+        y,
+        train_size=0.7,
     )
 
     ## training parameters
