@@ -1,9 +1,6 @@
 import os
-
-import numpy as np
 import pandas as pd
 import zipfile
-from sklearn.model_selection import train_test_split
 
 
 def get_training_data():
