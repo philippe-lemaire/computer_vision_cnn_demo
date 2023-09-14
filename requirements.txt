@@ -6,4 +6,3 @@ jupyterlab
 tensorflow
 scikit-learn
 black
-tensorrt
