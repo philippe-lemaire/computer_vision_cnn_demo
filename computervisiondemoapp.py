@@ -55,13 +55,13 @@ def full_app():
     """
     )
 
-    zoomfactor = 5
+    zoomfactor = 10
     # Specify canvas parameters in application
     drawing_mode = st.sidebar.selectbox(
         "Drawing tool:",
         ("freedraw",),
     )
-    stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, zoomfactor)
+    stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, 2 * zoomfactor)
     if drawing_mode == "point":
         point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
     stroke_color = st.sidebar.color_picker("Stroke color hex: ", "#FFF")
@@ -97,7 +97,7 @@ def full_app():
         to_predict = np.array([zoomed_img])
         prediction = model.predict(to_predict)
         st.write("### La prédiction :")
-        st.write(np.argmax(prediction, axis=1))
+        st.write(f"## {str(np.argmax(prediction, axis=1)[0])}")
         st.write("### Les probabilités estimées pour chaque chiffre")
         st.write(prediction)
 
