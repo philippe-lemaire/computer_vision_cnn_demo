@@ -4,5 +4,6 @@ streamlit
 matplotlib
 jupyterlab
 tensorflow
+scikit-learn
 black
 
