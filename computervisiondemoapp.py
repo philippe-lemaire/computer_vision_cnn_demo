@@ -88,7 +88,7 @@ def full_app():
     # Do something interesting with the image
 
     def make_prediction():
-        st.image(canvas_result.image_data)
+        # st.image(canvas_result.image_data)
         img_data = canvas_result.image_data[:, :, 0].reshape(
             28 * zoomfactor, 28 * zoomfactor, 1
         )
