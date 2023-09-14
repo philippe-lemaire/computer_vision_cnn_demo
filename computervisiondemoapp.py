@@ -48,10 +48,10 @@ def full_app():
     st.sidebar.header("Configuration")
     st.markdown(
         """
-    Draw on the canvas, get the drawings back to Streamlit!
-    * Configure canvas in the sidebar
-    * In transform mode, double-click an object to remove it
-    * In polygon mode, left-click to add a point, right-click to close the polygon, double-click to remove the latest point
+    Dessinez sur le canvas ci-dessous, et obtenez la prédiction du modèle entraîné !
+    * Vous pouvez configerer l’épaisseur du trait dans la barre latérale (ne pas trop réduire)
+    * vous pouvez dessiner votre chiffre en plusieurs traits successifs, annuler les derniers traits faits…
+    * cliquez sur le bouton pour obtenir la prédiction du modèle
     """
     )
 
