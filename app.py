@@ -35,11 +35,7 @@ def main():
     with st.sidebar:
         st.markdown("---")
         st.markdown(
-            '<h6>Made in &nbsp<img src="https://streamlit.io/images/brand/streamlit-mark-color.png" alt="Streamlit logo" height="16">&nbsp by <a href="https://twitter.com/andfanilo">@andfanilo</a></h6>',
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            '<div style="margin: 0.75em 0;"><a href="https://www.buymeacoffee.com/andfanilo" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a></div>',
+            "<h6>Made with love by Philippe du Tubà</h6>",
             unsafe_allow_html=True,
         )
 
@@ -49,7 +45,6 @@ def full_app():
     st.markdown(
         """
     Dessinez sur le canvas ci-dessous, et obtenez la prédiction du modèle entraîné !
-    * Vous pouvez configerer l’épaisseur du trait dans la barre latérale (ne pas trop réduire)
     * vous pouvez dessiner votre chiffre en plusieurs traits successifs, annuler les derniers traits faits…
     * cliquez sur le bouton pour obtenir la prédiction du modèle
     """
@@ -57,17 +52,13 @@ def full_app():
 
     zoomfactor = 10
     # Specify canvas parameters in application
-    drawing_mode = st.sidebar.selectbox(
-        "Drawing tool:",
-        ("freedraw",),
-    )
-    stroke_width = st.sidebar.slider("Stroke width: ", 1, 25, 2 * zoomfactor)
-    if drawing_mode == "point":
-        point_display_radius = st.sidebar.slider("Point display radius: ", 1, 25, 3)
-    stroke_color = st.sidebar.color_picker("Stroke color hex: ", "#FFF")
-    bg_color = st.sidebar.color_picker("Background color hex: ", "#000")
-    bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
-    realtime_update = st.sidebar.checkbox("Update in realtime", True)
+    drawing_mode = "freedraw"
+
+    stroke_width = st.sidebar.slider("Stroke width: ", 2, 25, 2 * zoomfactor)
+    stroke_color = "#FFF"
+    bg_color = "#000"
+    # bg_image = st.sidebar.file_uploader("Background image:", type=["png", "jpg"])
+    # realtime_update = st.sidebar.checkbox("Update in realtime", True)
 
     # Create a canvas component
     canvas_result = st_canvas(
@@ -75,12 +66,12 @@ def full_app():
         stroke_width=stroke_width,
         stroke_color=stroke_color,
         background_color=bg_color,
-        background_image=Image.open(bg_image) if bg_image else None,
-        update_streamlit=realtime_update,
+        background_image=None,
+        update_streamlit=True,
         height=28 * zoomfactor,
         width=28 * zoomfactor,
         drawing_mode=drawing_mode,
-        point_display_radius=point_display_radius if drawing_mode == "point" else 0,
+        # point_display_radius=point_display_radius if drawing_mode == "point" else 0,
         display_toolbar=st.sidebar.checkbox("Display toolbar", True),
         key="full_app",
     )
@@ -106,9 +97,8 @@ def full_app():
 
 
 if __name__ == "__main__":
-    st.set_page_config(
-        page_title="Streamlit Drawable Canvas Demo", page_icon=":pencil2:"
-    )
-    st.title("Neural Network Digit Recognition Demo")
+    title = "Neural Network Digit vision demo"
+    st.set_page_config(page_title=title, page_icon=":pencil2:")
+    st.title(title)
     st.sidebar.subheader("Configuration")
     main()
