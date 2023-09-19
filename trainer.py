@@ -46,8 +46,8 @@ def main():
     ## Data loading
     X, y = get_training_data()
 
-    # TODO add data augmentation by rotations
-    X, y = get_augmented_data(X, y)
+    # add data augmentation by rotations
+    # X, y = get_augmented_data(X, y)
 
     ## data val split
     X_train, X_val, y_train, y_val = train_test_split(
