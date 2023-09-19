@@ -6,6 +6,7 @@ from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from get_data import get_training_data
+from data_augmentation import get_augmented_data
 
 
 def create_model():
@@ -43,12 +44,10 @@ def create_model():
 
 def main():
     ## Data loading
-    X = get_training_data()
-    y = X.label
-    X = X.drop(columns="label")
+    X, y = get_training_data()
 
-    ## data reshaping to 28 x 28
-    X = X.to_numpy().reshape(X.shape[0], 28, 28, 1)
+    # TODO add data augmentation by rotations
+    X, y = get_augmented_data(X, y)
 
     ## data val split
     X_train, X_val, y_train, y_val = train_test_split(
