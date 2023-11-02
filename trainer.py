@@ -1,26 +1,32 @@
-import pandas as pd
 import os
+
 from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPool2D, Flatten, Dense, Dropout
 from tensorflow.keras.optimizers import Adam
 from tensorflow.keras.callbacks import EarlyStopping
 from get_data import get_training_data
-from data_augmentation import get_augmented_data
 
 
-def create_model():
+FILTERS = 8
+
+
+def create_model(filters):
     """Create a sequential NN for training on our images"""
     model = Sequential(
         [
             # une couche de neurones convolutifs input shape correspond aux dimensions des images
             Conv2D(
-                64, (3, 3), input_shape=(28, 28, 1), activation="relu", padding="same"
+                filters,
+                (3, 3),
+                input_shape=(28, 28, 1),
+                activation="relu",
+                padding="same",
             ),
             # une couche de MaxPool2D
             MaxPool2D(3, 3),
             # une autre couche de neurones convolutifs et son MaxPool
-            Conv2D(64, 3, activation="relu", padding="same"),
+            Conv2D(filters, 3, activation="relu", padding="same"),
             MaxPool2D(3, 3),
             # Couche Flatten
             # on met tout à plat à la fin
@@ -43,6 +49,7 @@ def create_model():
 
 
 def main():
+    here = os.getcwd()
     ## Data loading
     X, y = get_training_data()
 
@@ -64,7 +71,7 @@ def main():
     )
 
     ## model instance
-    model = create_model()
+    model = create_model(filters=FILTERS)
     model.fit(
         X_train,
         y_train,
@@ -78,11 +85,11 @@ def main():
         callbacks=[earlystop],
     )
 
-    # create checkpoints dir
+    os.chdir(here)
     os.makedirs("checkpoints", exist_ok=True)
 
     # Save the weights
-    weight_path = "./checkpoints/my_checkpoint"
+    weight_path = "checkpoints/my_checkpoint"
     model.save_weights(weight_path)
 
 

@@ -2,14 +2,13 @@ import streamlit as st
 from streamlit_drawable_canvas import st_canvas
 import cv2
 import numpy as np
-import pandas as pd
-from trainer import create_model
+from trainer import create_model, FILTERS
 
 
 # model creation
 
 # Create a new model instance
-model = create_model()
+model = create_model(filters=FILTERS)
 
 # Restore the weights
 model.load_weights("./checkpoints/my_checkpoint").expect_partial()
