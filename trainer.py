@@ -49,7 +49,7 @@ def create_model(filters):
 
 
 def main():
-    here = os.getcwd()
+    working_directory = os.getcwd()
     ## Data loading
     X, y = get_training_data()
 
@@ -72,7 +72,7 @@ def main():
 
     ## model instance
     model = create_model(filters=FILTERS)
-    model.fit(
+    history = model.fit(
         X_train,
         y_train,
         batch_size=32,  # le nombre d'images traitées dans une vague
@@ -85,12 +85,16 @@ def main():
         callbacks=[earlystop],
     )
 
-    os.chdir(here)
-    os.makedirs("checkpoints", exist_ok=True)
+    accuracy = max(history.history["val_accuracy"])
+    percent_format = "{:.1%}"
+    print(f"Modèle entraîné ! Précision estimée à {percent_format.format(accuracy)}.")
+
+    os.makedirs(os.path.join(working_directory, "checkpoints"), exist_ok=True)
 
     # Save the weights
-    weight_path = "checkpoints/my_checkpoint"
+    weight_path = os.path.join(working_directory, "checkpoints/my_checkpoint")
     model.save_weights(weight_path)
+    print("Poids du modèle enregistrés pour utilisation future.")
 
 
 if __name__ == "__main__":
